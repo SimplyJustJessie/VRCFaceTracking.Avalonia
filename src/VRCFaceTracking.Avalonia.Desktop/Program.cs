@@ -7,7 +7,8 @@ namespace VRCFaceTracking.Avalonia.Desktop;
 
 internal sealed class Program
 {
-    private static readonly Mutex Mutex = new(false, "vrcfacetracking-avalonia-unique-id");
+    // Global\ so it spans login sessions: on Linux a plain name is per session, and SteamVR's autolaunch runs in another one
+    private static readonly Mutex Mutex = new(false, @"Global\vrcfacetracking-avalonia-unique-id");
 
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
