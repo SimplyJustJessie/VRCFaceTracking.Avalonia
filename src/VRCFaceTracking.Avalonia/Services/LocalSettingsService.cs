@@ -13,7 +13,9 @@ namespace VRCFaceTracking.Services;
 public class LocalSettingsService : ILocalSettingsService
 {
     public string DefaultApplicationDataFolder => Path.Combine("VRCFaceTracking", "ApplicationData");
-    public static string DefaultLocalSettingsFile => Path.Combine(AppContext.BaseDirectory, "LocalSettings.json");
+    public const string LocalSettingsFileName = "LocalSettings.json";
+    // The bundled copy next to the app: read once as configuration (LocalSettingsOptions)
+    public static string DefaultLocalSettingsFile => Path.Combine(AppContext.BaseDirectory, LocalSettingsFileName);
 
     private readonly IFileService _fileService;
     private readonly LocalSettingsOptions _options;
@@ -32,7 +34,8 @@ public class LocalSettingsService : ILocalSettingsService
         _options = options.Value;
 
         _applicationDataFolder = Path.Combine(_localApplicationData, _options.ApplicationDataFolder ?? DefaultApplicationDataFolder);
-        _localSettingsFile = _options.LocalSettingsFile ?? DefaultLocalSettingsFile;
+        // User settings live in the app data folder: the app's own folder can be read-only (AppImage)
+        _localSettingsFile = _options.LocalSettingsFile ?? LocalSettingsFileName;
 
         _settings = new Dictionary<string, object>();
     }
